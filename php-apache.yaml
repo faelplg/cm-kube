@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-apache-hpa
+spec:
+  selector:
+    matchLabels:
+      run: php-apache-hpa
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: php-apache-hpa
+    spec:
+      containers:
+        - name: php-apache-hpa
+          image: faelplg/php-apache-hpa
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-apache-hpa
+  labels:
+    run: php-apache-hpa
+spec:
+  ports:
+    - port: 80
+  selector:
+    run: php-apache-hpa
